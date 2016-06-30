@@ -1,0 +1,8 @@
+# Mathematical Dependancies
+scipy
+
+# Development Tools
+pytest
+
+# Documentation
+sphinx
