@@ -33,7 +33,7 @@ class PowerBase(object):
 
         # Check value of and assign alpha.  Alpha must be in [0, 1].
         if alpha is not None:
-            in_0_1(alpha, 'alpha')
+            is_in_0_1(alpha, 'alpha')
             self.alpha = alpha
         else:
             self.alpha = None
@@ -44,7 +44,7 @@ class PowerBase(object):
         # and ensures they hold proper values (i.e. in [0, 1] and
         # `beta` = 1 - `power` ).
         if power is not None:
-            in_0_1(power, 'power')
+            is_in_0_1(power, 'power')
             if beta is not None:
                 if beta is not (1 - power):
                     raise ValueError("`power` does not equal 1 - `beta`.")
@@ -55,7 +55,7 @@ class PowerBase(object):
                 self.power = power
                 self.beta = 1 - power
         elif beta is not None:
-            in_0_1(beta, 'beta')
+            is_in_0_1(beta, 'beta')
             self.beta = beta
             self.power = 1 - beta
         else:
@@ -101,7 +101,7 @@ class PowerBase(object):
             self.beta = 0.2
 
 
-def in_0_1(value, value_label):
+def is_in_0_1(value, value_label):
     """ Checks if a value is within [0, 1]
 
     Arguments:
@@ -117,7 +117,7 @@ def in_0_1(value, value_label):
         raise ValueError("`" + value_label + "` must be in [0, 1]")
 
 
-def non_negative(value, value_label):
+def is_non_negative(value, value_label):
     """ Checks if a value is non-negative
 
     Arguments:
@@ -133,7 +133,7 @@ def non_negative(value, value_label):
         raise ValueError("`" + value_label + "` must be non-negative")
 
 
-def positive(value, value_label):
+def is_positive(value, value_label):
     """ Checks if a value is postive
 
     Arguments:
@@ -147,3 +147,59 @@ def positive(value, value_label):
         raise ValueError("`" + value_label + "` must be a number")
     if value <= 0:
         raise ValueError("`" + value_label + "` must be postive")
+
+
+def is_numeric(value, value_label):
+    """ Checks if a value is a number (float or integer)
+
+    Arguments:
+        value: the value to check
+        value_label: a name for the value to check
+
+    Raises:
+        ValueError: if `value` is not a number
+    """
+    if not isinstance(value, numbers.Number):
+        raise ValueError("`" + value_label + "` must be a number")
+
+
+def is_float(value, value_label):
+    """ Checks if a value is a float
+
+    Arguments:
+        value: the value to check
+        value_label: a name for the value to check
+
+    Raises:
+        ValueError: if `value` is not a float
+    """
+    if not isinstance(value, float):
+        raise ValueError("`" + value_label + "` must be a float")
+
+
+def is_integer(value, value_label):
+    """ Checks if a value is an integer
+
+    Arguments:
+        value: the value to check
+        value_label: a name for the value to check
+
+    Raises:
+        ValueError: if `value` is not a integer
+    """
+    if not isinstance(value, int):
+        raise ValueError("`" + value_label + "` must be an integer")
+
+
+def is_boolean(value, value_label):
+    """ Checks if a value is a Boolean
+
+    Arguments:
+        value: the value to check
+        value_label: a name for the value to check
+
+    Raises:
+        ValueError: if `value` is not a Boolean
+    """
+    if not isinstance(value, bool):
+        raise ValueError("`" + value_label + "` must be an Boolean")
