@@ -4,7 +4,8 @@
 from skdesign.power.means import (OneSample,
                                   TwoSampleParallel,
                                   TwoSampleCrossover,
-                                  OneWayAnova)
+                                  OneWayAnova,
+                                  MultiSampleWilliams)
 
 
 def test_one_sample():
@@ -390,5 +391,26 @@ def test_one_way_anova_simultaneous():
 
     h = OneWayAnova(n=11, mu=[8.25, 11.75, 12.00, 13.00], stdev=3.5,
                     comparison='simultaneous', power=0.8)
+    h.calculate()
+    assert h.alpha < 0.05
+
+
+def test_multi_sample_williams():
+    h = MultiSampleWilliams(mu=[0.20, 0.15, 0.25], stdev=0.1,
+                            hypothesis='equality', alpha=0.05, power=0.8,
+                            known_stdev=True)
+    h.calculate()
+    assert h.n == 6
+    assert h.power > 0.80
+
+    h = MultiSampleWilliams(n=6, mu=[0.20, 0.15, 0.25], stdev=0.1,
+                            hypothesis='equality', alpha=0.05,
+                            known_stdev=True)
+    h.calculate()
+    assert h.power > 0.80
+
+    h = MultiSampleWilliams(n=6, mu=[0.20, 0.15, 0.25], stdev=0.1,
+                            hypothesis='equality', power=0.80,
+                            known_stdev=True)
     h.calculate()
     assert h.alpha < 0.05
