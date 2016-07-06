@@ -3,7 +3,8 @@
 # import pytest
 from skdesign.power.means import (OneSample,
                                   TwoSampleParallel,
-                                  TwoSampleCrossover)
+                                  TwoSampleCrossover,
+                                  OneWayAnova)
 
 
 def test_one_sample():
@@ -373,3 +374,21 @@ def test_two_sample_crossover():
                            known_stdev=False)
     h.calculate()
     assert h.power >= 0.8690
+
+
+def test_one_way_anova_simultaneous():
+    h = OneWayAnova(mu=[8.25, 11.75, 12.00, 13.00], stdev=3.5,
+                    comparison='simultaneous', alpha=0.05, power=0.8)
+    h.calculate()
+    assert h.n == 11
+    assert h.power > 0.80
+
+    h = OneWayAnova(n=11, mu=[8.25, 11.75, 12.00, 13.00], stdev=3.5,
+                    comparison='simultaneous', alpha=0.05)
+    h.calculate()
+    assert h.power > 0.80
+
+    h = OneWayAnova(n=11, mu=[8.25, 11.75, 12.00, 13.00], stdev=3.5,
+                    comparison='simultaneous', power=0.8)
+    h.calculate()
+    assert h.alpha < 0.05
