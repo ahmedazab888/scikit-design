@@ -2,7 +2,7 @@
 """
 
 import pytest
-import randomization
+import skdesign.randomization as randomization
 
 
 def run_length(result):
