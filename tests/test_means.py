@@ -2,7 +2,8 @@
 
 # import pytest
 from skdesign.power.means import (OneSample,
-                                  TwoSampleParallel)
+                                  TwoSampleParallel,
+                                  TwoSampleCrossover)
 
 
 def test_one_sample():
@@ -268,3 +269,107 @@ def test_two_sample_parallel():
                           margin=0.05, known_stdev=False)
     h.calculate()
     assert h.alpha < 0.05
+
+
+def test_two_sample_crossover():
+    """ Tests for hypotheses on two sample means crossover design """
+
+    # From Chow et al 3.3.4
+    h = TwoSampleCrossover(mu_1=10, mu_2=0, stdev=2*20, alpha=0.05,
+                           power=0.9, hypothesis="equality",
+                           known_stdev=False)
+    h.calculate()
+    assert h.n == 86
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=-0.1, mu_2=0, stdev=0.2, alpha=0.05,
+                           power=0.8, hypothesis="superiority",
+                           margin=0.2)
+    h.calculate()
+    assert h.n == 13
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=-0.1, mu_2=0, stdev=0.2, n=13,
+                           power=0.8, hypothesis="superiority",
+                           margin=0.2)
+    h.calculate()
+    assert h.alpha < 0.05
+
+    h = TwoSampleCrossover(mu_1=-0.1, mu_2=0, stdev=0.2, alpha=0.05,
+                           n=13, hypothesis="superiority",
+                           margin=0.2)
+    h.calculate()
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, alpha=0.05,
+                           power=0.8, hypothesis="superiority",
+                           margin=0.2, known_stdev=False)
+    h.calculate()
+    assert h.n == 14
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, n=14,
+                           power=0.8, hypothesis="superiority",
+                           margin=0.2, known_stdev=False)
+    h.calculate()
+    assert h.alpha < 0.05
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, alpha=0.05,
+                           n=14, hypothesis="superiority",
+                           margin=0.2, known_stdev=False)
+    h.calculate()
+    assert h.n == 14
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, alpha=0.05,
+                           power=0.8, hypothesis="equivalence",
+                           margin=0.25)
+    h.calculate()
+    assert h.n == 8
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, n=8,
+                           power=0.8, hypothesis="equivalence",
+                           margin=0.25)
+    h.calculate()
+    assert h.alpha < 0.05
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, n=8,
+                           alpha=0.05, hypothesis="equivalence",
+                           margin=0.25)
+    h.calculate()
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, alpha=0.05,
+                           power=0.8, hypothesis="equivalence",
+                           margin=0.25, known_stdev=False)
+    h.calculate()
+    assert h.n == 9
+    assert h.power > 0.80
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, n=9,
+                           power=0.8, hypothesis="equivalence",
+                           margin=0.25, known_stdev=False)
+    h.calculate()
+    assert h.alpha < 0.05
+
+    h = TwoSampleCrossover(mu_1=0.9, mu_2=1, stdev=0.2, n=9,
+                           alpha=0.05, hypothesis="equivalence",
+                           margin=0.25, known_stdev=False)
+    h.calculate()
+    assert h.power > 0.80
+
+    # From the PASS 11 Manual: pg 500-10
+    # Note: PASS uses a different stdev which is equal to half the stdev
+    # used in these calculations.
+    h = TwoSampleCrossover(mu_1=10, mu_2=0, stdev=2*20, n=86,
+                           power=0.9, hypothesis="equality",
+                           known_stdev=False)
+    h.calculate()
+    assert h.alpha < 0.05
+
+    h = TwoSampleCrossover(mu_1=10, mu_2=0, stdev=2*10, n=40,
+                           alpha=0.05, hypothesis="equality",
+                           known_stdev=False)
+    h.calculate()
+    assert h.power >= 0.8690
