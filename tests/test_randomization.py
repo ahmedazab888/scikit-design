@@ -95,11 +95,16 @@ def test_complete():
 
 def test_complete_max_deviation():
     """ Test Cases for Complete Ranomization with max-deviation """
-    groups = [1, 2, 1, 1, 2, 1, 2, 1, 2]
+    # Make it long enough such that the probability of failure is tiny
+    groups = [1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2]
+    groups.extend(groups)
+    groups.extend(groups)
     result = randomization.complete_max_deviation(groups)
     assert not groups == result
 
-    groups = [1, 2, 1, 1, 2, 1, 2, 1, 2]
+    groups = [1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2]
+    groups.extend(groups)
+    groups.extend(groups)
     result = randomization.complete_max_deviation(groups,
                                                   max_allowed_deviation=0.5)
     assert not groups == result
