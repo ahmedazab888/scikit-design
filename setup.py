@@ -12,7 +12,7 @@ def readme():
 
 # Check this against the documentation for setuptools
 setup(name='skdesign',
-      version='0.1',
+      version='0.1.01',
       description='Tools for Statistical Study Design',
       long_description=readme(),
       keywords='randomization study design trial',
