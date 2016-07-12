@@ -24,7 +24,7 @@ class RelativeRiskParallel(PowerBase):
     The test for superiority tests :math:`H_{0}: OR > 1` versus
     :math:`H_{1}: OR \\le 1`.
 
-    The test for equivalence tests :math:`H_{0}: OR \ne 1` versus
+    The test for equivalence tests :math:`H_{0}: OR \\ne 1` versus
     :math:`H_{1}: OR = 1`.
 
     Attributes:
@@ -152,6 +152,7 @@ class RelativeRiskParallel(PowerBase):
         self.power = 1 - self.beta
 
     def calculate(self):
+        """ Perfrom the power calculation """
         if self.n is None:
             self._set_default_alpha()
             self._set_default_power()

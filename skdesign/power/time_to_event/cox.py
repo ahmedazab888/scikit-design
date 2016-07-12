@@ -7,21 +7,23 @@ import math
 class Cox(OneSample):
     """ Hypotheses for Cox's Proportional Hazard Model.
 
-    Hypothesis:
-        Let :math:`b` be the hazard ratio of two survival curves.
-        Equality: The test of equality tests the null hypothesis that
-            :math:`b \\eq 0` versus the alternative that
-            :math:`b \\ne 0`.
-        Superiority and Non-Inferiority: The test of superiority (and the test
-            of non-inferiority, which differs only in the direction of the
-            comparison) tests the null hypothesis that
-            :math:`b \\le \\delta` versus the alternative that
-            :math:`b \\gt \\delta` where :math:`\\delta` is
-            the margin above which two means are considered different.
-        Equivalence: The test of equivalence tests the null hypothesis that
-            :math:`b \\ge \\delta` versus the alternative that
-            :math:`b \\lt \\delta` where :math:`\\delta` is
-            the margin above which two means are considered different.
+    Let :math:`b` be the hazard ratio of two survival curves.  Cox's
+    proportional hazard model contains the following hypotheses about
+    :math:`b`.
+
+    Equality: The test of equality tests the null hypothesis that
+        :math:`b = 0` versus the alternative that
+        :math:`b \\ne 0`.
+    Superiority and Non-Inferiority: The test of superiority (and the test
+        of non-inferiority, which differs only in the direction of the
+        comparison) tests the null hypothesis that
+        :math:`b \\le \\delta` versus the alternative that
+        :math:`b \\gt \\delta` where :math:`\\delta` is
+        the margin above which two means are considered different.
+    Equivalence: The test of equivalence tests the null hypothesis that
+        :math:`b \\ge \\delta` versus the alternative that
+        :math:`b \\lt \\delta` where :math:`\\delta` is
+        the margin above which two means are considered different.
 
     Attributes:
         n: The sample size for the calculation

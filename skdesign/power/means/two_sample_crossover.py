@@ -19,7 +19,7 @@ class TwoSampleCrossover(MeansBase):
     The test for superiority tests :math:`H_{0}: \\mu_{1} > \\mu_{2}` versus
     :math:`H_{1}: \\mu_{1} \\le \\mu_{2}`.
 
-    The test for equivalence tests :math:`H_{0}: \\mu_{1} \ne \\mu_{2}` versus
+    The test for equivalence tests :math:`H_{0}: \\mu_{1} \\ne \\mu_{2}` versus
     :math:`H_{1}: \\mu_{1}=\\mu_{2}`.
 
     Attributes:
@@ -90,6 +90,7 @@ class TwoSampleCrossover(MeansBase):
         return power
 
     def calculate(self):
+        """ Performs the power calculation """
         if self.known_stdev:
             if self.n is None:
                 self._set_default_alpha()

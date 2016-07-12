@@ -17,7 +17,7 @@ class OneSample(OneSampleMeans):
     The test for superiority tests :math:`H_{0}: p > p_{0}` versus
     :math:`H_{1}: p \\le p_{0}`.
 
-    The test for equivalence tests :math:`H_{0}: p \ne p_{0}` versus
+    The test for equivalence tests :math:`H_{0}: p \\ne p_{0}` versus
     :math:`H_{1}: p = p_{0}`.
 
     Attributes:

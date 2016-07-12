@@ -86,6 +86,7 @@ class OneWayAnova(PowerBase):
                                           beta=beta, hypothesis='equality')
 
     def calculate(self):
+        """ Perfrom the power calculation """
         # Adjust alpha for multiple comparisons
         alpha = self.alpha / (2 * self.tau)
         if self.n is None:

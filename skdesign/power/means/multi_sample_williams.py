@@ -110,6 +110,7 @@ class MultiSampleWilliams(PowerBase):
         return power
 
     def calculate(self):
+        """ Performs the power calculation """
         if self.known_stdev:
             # When stdev is known, this collapses to a one sample test with
             # stdev = stdev / sqrt(k)

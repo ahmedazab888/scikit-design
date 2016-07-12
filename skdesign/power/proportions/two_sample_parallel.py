@@ -19,7 +19,7 @@ class TwoSampleParallel(PowerBase):
     The test for superiority tests :math:`H_{0}: p_{1} > p_{2}` versus
     :math:`H_{1}: p_{1} \\le p_{2}`.
 
-    The test for equivalence tests :math:`H_{0}: p_{1} \ne p_{2}` versus
+    The test for equivalence tests :math:`H_{0}: p_{1} \\ne p_{2}` versus
     :math:`H_{1}: p_{1} = p_{2}`.
 
     Attributes:
@@ -144,6 +144,7 @@ class TwoSampleParallel(PowerBase):
         self.power = 1 - self.beta
 
     def calculate(self):
+        """ Perfrom the power calculation """
         if self.n is None:
             self._set_default_alpha()
             self._set_default_power()

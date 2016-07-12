@@ -34,8 +34,8 @@ def max_deviation(lst, values):
     Maximum deviation for group :math:`g`: at the :math:`i^{th}` assignment
     is defined as:
 
-    ..math::
-        frac{|n_g(i) - E[n_g(i)]|}{n_i}
+    .. math::
+        \\frac{|n_g(i) - E[n_g(i)]|}{n_i}
 
     where :math:`n_g(i)` is the number of assignments to group :math:`g` at the
     :math:`i^{th}` assignment, :math:`E[n_g(i)]` is the expected number of

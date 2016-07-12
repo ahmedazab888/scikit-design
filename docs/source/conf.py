@@ -19,7 +19,10 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../randomization'))
+sys.path.insert(0, os.path.abspath('../../skdesign'))
+sys.path.insert(0, os.path.abspath('../../skdesign/power'))
+sys.path.insert(0, os.path.abspath('../../skdesign/randomization'))
+sys.path.insert(0, os.path.abspath('../../skdesign/design'))
 print(sys.path)
 
 # -- General configuration ------------------------------------------------

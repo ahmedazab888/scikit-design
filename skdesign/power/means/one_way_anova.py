@@ -118,12 +118,14 @@ class OneWayAnova(PowerBase):
         return power
 
     def calculate(self):
+        """ Performs the power calculation """
         if self.comparison == 'pairwise':
             self.calculate_pairwise()
         else:
             self.calculate_simultaneous()
 
     def calculate_pairwise(self):
+        """ Performs the power calculation for pairwise comparisions """
         # Adjust alpha for multiple comparisons
         alpha = self.alpha / (self.tau * 2)
         if self.n is None:
@@ -165,6 +167,7 @@ class OneWayAnova(PowerBase):
             self.alpha = (2 * self.tau) * one_sample.alpha
 
     def calculate_simultaneous(self):
+        """ Performs the power calculation for simultaneous comparisions """
         delta = self.calculate_delta()
         if self.n is None:
             res = brenth(lambda ncp:

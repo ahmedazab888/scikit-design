@@ -7,21 +7,23 @@ from skdesign.power import (is_non_negative,
 class Exponential(TwoSampleParallel):
     """ Hypotheses that compares two exponential survival functions.
 
-    Hypothesis:
-        Let :math:`\\delta = \\lambda_{c} - \\lambda_{t}`.
-        Equality: The test of equality tests the null hypothesis that
-            :math:`\\delta \\eq 0` versus the alternative that
-            :math:`\\delta \\ne 0`.
-        Superiority and Non-Inferiority: The test of superiority (and the test
-            of non-inferiority, which differs only in the direction of the
-            comparison) tests the null hypothesis that
-            :math:`\\delta \\le \\epsilon` versus the alternative that
-            :math:`\\delta \\gt \\epsilon` where :math:`\\epsilon` is
-            the margin above which two means are considered different.
-        Equivalence: The test of equivalence tests the null hypothesis that
-            :math:`|\\delta| \\ge \\epsilon` versus the alternative that
-            :math:`|\\delta| \\lt \\epsilon` where :math:`\\epsilon` is
-            the margin above which two means are considered different.
+    Let :math:`\\delta = \\lambda_{c} - \\lambda_{t}`.  The exponential
+    survival model allows you to test one of three hypotheses about
+    :math:`\\delta`.
+
+    Equality: The test of equality tests the null hypothesis that
+        :math:`\\delta = 0` versus the alternative that
+        :math:`\\delta \\ne 0`.
+    Superiority and Non-Inferiority: The test of superiority (and the test
+        of non-inferiority, which differs only in the direction of the
+        comparison) tests the null hypothesis that
+        :math:`\\delta \\le \\epsilon` versus the alternative that
+        :math:`\\delta \\gt \\epsilon` where :math:`\\epsilon` is
+        the margin above which two means are considered different.
+    Equivalence: The test of equivalence tests the null hypothesis that
+        :math:`|\\delta| \\ge \\epsilon` versus the alternative that
+        :math:`|\\delta| \\lt \\epsilon` where :math:`\\epsilon` is
+        the margin above which two means are considered different.
 
     Attributes:
         n_1: The control sample size.

@@ -22,7 +22,7 @@ class RelativeRiskCrossover(TwoSampleCrossover):
     The test for superiority tests :math:`H_{0}: OR > 1` versus
     :math:`H_{1}: OR \\le 1`.
 
-    The test for equivalence tests :math:`H_{0}: OR \ne 1` versus
+    The test for equivalence tests :math:`H_{0}: OR \\ne 1` versus
     :math:`H_{1}: OR = 1`.
 
 
@@ -49,7 +49,7 @@ class RelativeRiskCrossover(TwoSampleCrossover):
             respect to the power calculation so choose 'superiority' for both.
         margin: This is the superiority or equivalence margin.
         odds_ratio: The estimated odds ratio
-        stdev: :math:`\\sigma_{d}, estimated as is as in Chow (section 4.7)
+        stdev: :math:`\\sigma_{d}`, estimated as is as in Chow (section 4.7)
     """
     def __init__(self, n=None, odds_ratio=None, stdev=None, hypothesis=None,
                  margin=None, alpha=None, beta=None, power=None):

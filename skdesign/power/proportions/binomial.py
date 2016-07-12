@@ -61,6 +61,7 @@ class Binomial(PowerBase):
                                        beta=beta, hypothesis='equality')
 
     def calculate(self):
+        """ Perfrom the power calculation """
         if self.alpha is None:
             alpha = 0.05
         else:

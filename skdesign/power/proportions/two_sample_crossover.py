@@ -16,7 +16,7 @@ class TwoSampleCrossover(TwoSampleCrossoverMeans):
     The test for superiority tests :math:`H_{0}: \\epsilon > 0` versus
     :math:`H_{1}: \\epsilon \\le 0`.
 
-    The test for equivalence tests :math:`H_{0}: \\epsilon \ne 0` versus
+    The test for equivalence tests :math:`H_{0}: \\epsilon \\ne 0` versus
     :math:`H_{1}: \\epsilon=0`.
 
     Attributes:
@@ -27,7 +27,7 @@ class TwoSampleCrossover(TwoSampleCrossoverMeans):
         power: The power required by the hypothesis (equal to
             :math:`1 - \\beta`).
         epsilon: The estimated difference between the probabilities
-        stdev: :math:`\\sigma_{d}, estimated as is as in Chow (section 4.4)
+        stdev: :math:`\\sigma_{d}`, estimated as is as in Chow (section 4.4)
     """
 
     def __init__(self, n=None, epsilon=None, stdev=None, hypothesis=None,
