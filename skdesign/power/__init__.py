@@ -81,13 +81,13 @@ class PowerBase(object):
         return representation
 
     def _set_adjustments(self):
-        if self.hypothesis is 'equality':
+        if self.hypothesis == 'equality':
             self._alpha_adjustment = 2
             self._beta_adjustment = 1
-        elif self.hypothesis is 'superiority':
+        elif self.hypothesis == 'superiority':
             self._alpha_adjustment = 1
             self._beta_adjustment = 1
-        elif self.hypothesis is 'equivalence':
+        elif self.hypothesis == 'equivalence':
             self._alpha_adjustment = 1
             self._beta_adjustment = 2
 
