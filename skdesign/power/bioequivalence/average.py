@@ -13,7 +13,7 @@ class Average(TwoSampleCrossover):
         n: The sample size required to test the hypothesis at an
             :math:`\\alpha` level and a power of :math:`1 - \\beta`.
         delta: :math:`\\delta` is the average bioequivalence
-        sigma: :math:`\\sigma` is the standard deviation of the sample.
+        stdev: :math:`\\sigma` is the standard deviation of the sample.
         known_stdev: A boolean indicator if the standard deviation
         alpha: The :math:`\\alpha` level required by the hypothesis.
         beta: The :math:`\\beta` level required by the hypothesis (equal to
