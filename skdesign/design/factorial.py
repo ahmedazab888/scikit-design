@@ -1,5 +1,6 @@
 """ Functions for a factorial design """
 import random
+from numpy import array
 
 
 def block_design(randomize=None, seed=None, **kwargs):
