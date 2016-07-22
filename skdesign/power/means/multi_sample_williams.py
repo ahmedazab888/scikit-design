@@ -102,7 +102,7 @@ class MultiSampleWilliams(PowerBase):
         This is an internal static method only.  This overrides the
         superclasses method.
         """
-        nu = n_groups(n - 1)
+        nu = n_groups * (n - 1)
         ncp = math.sqrt(n) * abs(theta)
         quantile = stats.t.ppf(1 - alpha / _alpha_adjustment, nu)
         power = (1 - stats.nct.cdf(quantile, nu, ncp) +
@@ -195,7 +195,7 @@ class MultiSampleWilliams(PowerBase):
                                                                    self._beta_adjustment) -
                                      self.power, a=2, b=1e7)
                         test_n = math.ceil(res)
-                        test_power = self._calculate_power_unknown(self.n,
+                        test_power = self._calculate_power_unknown(test_n,
                                                                    self.alpha,
                                                                    theta,
                                                                    self._alpha_adjustment,
@@ -203,6 +203,8 @@ class MultiSampleWilliams(PowerBase):
                         if test_n > n:
                             n = test_n
                             power = test_power
+                self.n = n
+                self.power = power
             elif self.power is None:
                 power = 0
                 for i in range(0, self.n_groups - 1):
