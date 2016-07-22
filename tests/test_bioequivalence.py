@@ -44,7 +44,7 @@ def test_population_bioequivalence():
 #     """ Tests for Population Bioequivalence. """
 #     # See 10.4 Example from Chow et al.
 #     h = InVitro(delta=0, stdev_wr=0.5, stdev_wt=0.5, stdev_br=0.5,
-#                 stdev_bt=0.5, alpha=0.05, power=0.8)
+#                 stdev_bt=0.5, alpha=0.05, power=0.8, )
 #     h.calculate()
 #     assert h.n == 1
 #     assert h.m == 47
