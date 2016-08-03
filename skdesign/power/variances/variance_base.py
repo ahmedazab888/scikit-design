@@ -45,18 +45,18 @@ class VarianceBase(PowerBase):
         is_positive(stdev_2, 'stdev_2')
         self.stdev_2 = stdev_2
 
-        if hypothesis is 'equality':
+        if hypothesis == 'equality':
             self._alpha_adjustment = 2
             self._beta_adjustment = 1
             similarity_limit = 1
             sigma_ratio = stdev_2 / stdev_1
-        elif hypothesis is 'superiority':
+        elif hypothesis == 'superiority':
             self._alpha_adjustment = 1
             self._beta_adjustment = 1
             if similarity_limit is None:
                 raise ValueError('A similarity_limit must be provided')
             sigma_ratio = stdev_2 / (stdev_1 * similarity_limit)
-        elif hypothesis is 'equivalence':
+        elif hypothesis == 'equivalence':
             self._alpha_adjustment = 1
             self._beta_adjustment = 2
             if similarity_limit is None:

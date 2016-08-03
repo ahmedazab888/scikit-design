@@ -35,7 +35,7 @@ class IntraSubjectCV(OneSample):
             raise ValueError("`model` must be either 'simple' "
                              "or 'conditional'")
 
-        if model is 'simple':
+        if model == 'simple':
             stdev = cv_t**2 / m**2 + cv_t**4
             stdev += cv_r**2 / m**2 + cv_r**4
             stdev = math.sqrt(stdev)
