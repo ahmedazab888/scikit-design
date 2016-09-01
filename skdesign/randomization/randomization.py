@@ -102,9 +102,9 @@ def simple(n_subjects, n_groups, p=None, seed=None):
     else:
         if len(p) is not n_groups:
             raise ValueError("The length of `p` must be equal to `n_groups`.")
-        cumsum(p)
         # Normalize p to 1
-        p = [x / len(p) for x in p]
+        p = [x / sum(p) for x in p]
+        cumsum(p)
         for _ in range(0, n_subjects):
             test = random.random()
             # Find which group the next obs should be assigned to.
