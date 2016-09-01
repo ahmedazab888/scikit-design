@@ -113,9 +113,7 @@ def simple(n_subjects, n_groups, p=None, seed=None):
             for elem in p:
                 if elem < test:
                     group += 1
-                else:
-                    break
-            groups.append(group)
+            groups.append(group + 1)
     return groups
 
 

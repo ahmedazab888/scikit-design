@@ -69,6 +69,24 @@ def test_simple():
     assert percent_group_1 < 0.52
     assert percent_group_1 > 0.48
 
+    result = randomization.simple(100000, 2, p=[0.3, 0.7])
+    percent_group_1 = (float(sum([value == 1 for value in result])) /
+                       float(len(result)))
+    assert percent_group_1 < 0.32
+    assert percent_group_1 > 0.28
+
+    result = randomization.simple(100000, 2, p=[0.2, 0.4])
+    percent_group_1 = (float(sum([value == 1 for value in result])) /
+                       float(len(result)))
+    assert percent_group_1 < 0.35
+    assert percent_group_1 > 0.31
+
+    result = randomization.simple(100000, 2, p=[1, 2])
+    percent_group_1 = (float(sum([value == 1 for value in result])) /
+                       float(len(result)))
+    assert percent_group_1 < 0.35
+    assert percent_group_1 > 0.31
+
 
 def test_complete():
     """ Test Cases for Complete Ranomization
