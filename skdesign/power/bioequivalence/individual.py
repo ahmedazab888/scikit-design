@@ -78,6 +78,7 @@ class Individual(PowerBase):
 
     def calculate(self):
         gamma = self._calculate_gamma()
+        self.n = None
         for i in range(2, MAX_ITERATIONS):
             bound = gamma + math.sqrt(self._calculate_u(i, 0.05))
             bound += math.sqrt(self._calculate_u(i, self.power))

@@ -206,6 +206,7 @@ def complete_max_deviation(subjects, max_allowed_deviation=None,
         candidate_max_deviation = max_deviation(groups, group_labels)
         if candidate_max_deviation < max_allowed_deviation:
             return groups
+    return None
 
 
 def block(n_subjects, n_groups, block_length, seed=None):

@@ -29,15 +29,15 @@ def test_population_bioequivalence():
     assert h.n == 12
 
 
-# def test_individual_bioequivalence():
-#     """ Tests for Population Bioequivalence. """
-#     # See 10.4 Example from Chow et al.
-#     h = Individual(delta=0, stdev_wr=0.2, stdev_wt=0.3,
-#                    stdev_d=0.2, alpha=0.05, power=0.8)
-#     # h = Individual(delta=0, stdev_wr=0.4, stdev_wt=0.6,
-#     #                stdev_d=0.11, alpha=0.05, power=0.8)
-#     h.calculate()
-#     assert h.n == 22
+def test_individual_bioequivalence():
+    """ Tests for Population Bioequivalence. """
+    # See 10.4 Example from Chow et al.
+    h = Individual(delta=0, stdev_wr=0.2, stdev_wt=0.3,
+                   stdev_d=0.2, alpha=0.05, power=0.8)
+    h = Individual(delta=0, stdev_wr=0.4, stdev_wt=0.6,
+                   stdev_d=0.11, alpha=0.05, power=0.8)
+    h.calculate()
+    assert h.n == 22
 
 
 # def test_in_vitro_bioequivalence():

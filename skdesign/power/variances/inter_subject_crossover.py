@@ -3,7 +3,7 @@ import math
 
 
 class InterSubjectCrossover(OneSample):
-    """ Tests for Intersubject Variablility using a Parallel study with
+    """ Tests for Intersubject Variablility using a Crossover study with
     :math:`m` replicates.
 
     The test for equality tests:

@@ -96,7 +96,7 @@ def test_complete():
     """
 
     # First we test for numeric lists.
-    groups = [1, 2, 1, 1, 2, 1, 2, 1, 2]
+    groups = [1, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2]
     result = randomization.complete(groups)
     assert not groups == result
 
