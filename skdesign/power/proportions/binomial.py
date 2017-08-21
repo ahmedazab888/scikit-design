@@ -1,7 +1,9 @@
+import math
 from skdesign.power import (PowerBase,
                             is_in_0_1,
                             is_integer)
 import scipy.stats as stats
+import numpy.random as random
 
 
 class Binomial(PowerBase):
@@ -33,6 +35,10 @@ class Binomial(PowerBase):
         margin: The margin used in superiority hypotheses
     """
 
+    # Parameters controling the simulation of power
+    _N_SIMS = 1000
+    _SEED = 710321
+
     # Parameters controling the search grid for the calculation of sample size.
     _minN = 2
     _maxN = 40
@@ -61,41 +67,82 @@ class Binomial(PowerBase):
                                        beta=beta, hypothesis='equality')
 
     def calculate(self):
+        if self.n is None:
+            self.calculate_n()
+            self.calculate_alpha()
+        elif self.power is None:
+            self.calculate_power()
+        elif self.alpha is None:
+            self.calculate_alpha()
+
+    def calculate_n(self):
         """ Perfrom the power calculation """
-        if self.alpha is None:
-            alpha = 0.05
-        else:
-            alpha = self.alpha
         if self.power is None:
             power = 0.8
         else:
             power = self.power
 
-        beta = 1 - power
-        for thisN in range(self._minN, self._maxN + 1):
-            # First find a candidate alpha
-            dist = stats.binom(thisN, self.p_0)
-            lastP = 1
-            for thisR in range(thisN + 1):
-                thisP = 1 - dist.cdf(thisR)
-                if lastP > alpha and thisP < alpha:
-                    candidateR = thisR
-                    break
-                else:
-                    lastP = thisP
-            # Check the power
-            dist = stats.binom(thisN, self.p)
-            thisBeta = dist.cdf(candidateR)
-            if thisBeta < beta:
-                self.n = thisN
-                self.alpha = thisP
-                self.beta = thisBeta
-                self.power = 1 - self.beta
-                self.p
-                power = 1 - thisBeta
-                # Exit the function without returning anything
-                return None
+        if self.alpha is None:
+            alpha = 0.5
+        else:
+            alpha = self.alpha
 
-        # If an appropriate N is not found, fail.
-        raise BaseException("N > " + str(self._maxN) +
-                            ".  You should use large sample theory.")
+        random.seed(self._SEED)
+
+        found_solution = False
+        for n in range(self._minN, self._maxN):
+            res = random.binomial(n, self.p, self._N_SIMS)
+
+            count = 0
+            for x in res:
+                p_val = stats.binom_test(x, n=n, p=self.p_0)
+                if p_val < alpha:
+                    count += 1
+            test_power = count / self._N_SIMS
+            if test_power > power:
+                found_solution = True
+                self.power = test_power
+                self.n = n
+                break
+        if not found_solution:
+            raise BaseException("N > " + str(self._maxN) +
+                                ".  You should use large sample theory.")
+
+    def calculate_power(self):
+        """ Perfrom the power calculation """
+        if self.alpha is None:
+            alpha = 0.05
+        else:
+            alpha = self.alpha
+
+        random.seed(self._SEED)
+
+        res = random.binomial(self.n, self.p, self._N_SIMS)
+
+        count = 0
+        for x in res:
+            p_val = stats.binom_test(x, n=self.n, p=self.p_0)
+            if p_val < alpha:
+                count += 1
+        self.power = count / self._N_SIMS
+        self.beta = 1 - self.power
+
+    def calculate_alpha(self):
+        """ Perfrom the power calculation """
+        if self.power is None:
+            power = 0.8
+        else:
+            power = self.power
+
+        random.seed(self._SEED)
+
+        res = random.binomial(self.n, self.p, self._N_SIMS)
+
+        p_vals = []
+        for x in res:
+            p_val = stats.binom_test(x, n=self.n, p=self.p_0)
+            p_vals.append(p_val)
+        p_vals.sort()
+        print(power)
+        print(int(self._N_SIMS * power))
+        self.alpha = p_vals[int(self._N_SIMS * power)]
