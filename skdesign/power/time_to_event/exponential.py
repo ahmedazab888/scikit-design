@@ -78,7 +78,7 @@ class Exponential(TwoSampleParallel):
                 EVNum = (math.exp(-hazard * t) - math.exp(-hazard * (t - t_0)))
                 EVDenom = hazard * t_0
             else:
-                EVNum = (g * math.exp(-g * t) *
+                EVNum = (g * math.exp(-1 * hazard * t) *
                          (1 - math.exp((hazard - g) * t_0)))
                 EVDenom = (hazard - g) * (1 - math.exp(-g * t_0))
             EV = 1 + EVNum / EVDenom

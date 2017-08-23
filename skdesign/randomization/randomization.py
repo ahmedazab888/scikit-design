@@ -237,7 +237,7 @@ def block(n_subjects, n_groups, block_length, seed=None):
     block_form = []
     for i in range(0, block_length):
         # If n_groups is not a factor of block_length, there will be unbalance.
-        block_form.append(i % n_groups)
+        block_form.append(i % n_groups + 1)
 
     count = 0
     groups = []
@@ -287,7 +287,7 @@ def random_block(n_subjects, n_groups, block_lengths, seed=None):
     for block_length in block_lengths:
         block_form = []
         for i in range(0, block_length):
-            block_form.append(i % n_groups)
+            block_form.append(i % n_groups + 1)
         blocks.append(block_form)
     count = 0
     groups = []
@@ -322,7 +322,7 @@ def random_treatment_order(n_subjects, n_treatments, seed=None):
     random.seed(seed)
     treatment = []
     for i in range(0, n_treatments):
-        treatment.append(i)
+        treatment.append(i + 1)
     groups = []
     for i in range(0, n_subjects):
         random.shuffle(treatment)
@@ -376,11 +376,11 @@ def efrons_biased_coin(n_subjects, bias=None, seed=None):
             cut = bias
         test = random.random()
         if test > cut:
-            group = 0
-        else:
             group = 1
+        else:
+            group = 2
         groups.append(group)
-        if group == 0:
+        if group == 1:
             group_0_count += 1
     return groups
 
@@ -435,11 +435,11 @@ def smiths_exponent(n_subjects, exponent=None, seed=None):
 
         test = random.random()
         if test > cut:
-            group = 0
-        else:
             group = 1
+        else:
+            group = 2
         groups.append(group)
-        if group == 0:
+        if group == 1:
             group_0_count += 1
     return groups
 
@@ -485,11 +485,11 @@ def weis_urn(n_subjects, seed=None):
             cut = 0.5
         test = random.random()
         if test < cut:
-            group = 0
-        else:
             group = 1
+        else:
+            group = 2
         groups.append(group)
-        if group is 0:
+        if group is 1:
             group_0_count += 1
     return groups
 
@@ -578,9 +578,9 @@ def double_biased_coin_minimize(control_success, control_trials,
                          'to `treatment_success`')
 
     if control_name is None:
-        control_name = "C"
+        control_name = "Control"
     if treatment_name is None:
-        treatment_name = "T"
+        treatment_name = "Treatment"
 
     if seed is not None:
         # This ensures a new seed for each selection
@@ -653,9 +653,9 @@ def double_biased_coin_urn(control_success, control_trials,
                          'to `treatment_success`')
 
     if control_name is None:
-        control_name = "C"
+        control_name = "Control"
     if treatment_name is None:
-        treatment_name = "T"
+        treatment_name = "Treatment"
 
     if seed is not None:
         # This ensures a new seed for each selection

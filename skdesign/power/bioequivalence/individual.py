@@ -31,7 +31,8 @@ class Individual(PowerBase):
     """
 
     def __init__(self, delta=None, stdev_wr=None, stdev_wt=None,
-                 stdev_d=None, theta_IBE=None, alpha=None, power=None,
+                 stdev_br=None, stdev_bt=None, rho=None,
+                 theta_IBE=None, alpha=None, power=None,
                  beta=None):
         is_numeric(delta, 'delta')
         self.delta = delta
@@ -40,9 +41,15 @@ class Individual(PowerBase):
         self.stdev_wr = stdev_wr
         is_positive(stdev_wt, 'stdev_wt')
         self.stdev_wt = stdev_wt
-        is_positive(stdev_d, 'stdev_d')
-        self.stdev_d = stdev_d
+        is_positive(stdev_bt, 'stdev_br')
+        self.stdev_br = stdev_br
+        is_positive(stdev_bt, 'stdev_bt')
+        self.stdev_bt = stdev_bt
+        is_in_0_1(rho, 'rho')
+        self.rho = rho
 
+        var_d = self.stdev_bt**2 + self.stdev_br**2 - 2 * self.rho * self.stdev_bt**2 * self.stdev_bt**2
+        self.stdev_d = math.sqrt(var_d)
         if theta_IBE is None:
             theta_IBE = 1.74
         else:
@@ -55,7 +62,7 @@ class Individual(PowerBase):
 
     def _calculate_gamma(self):
         gamma = self.delta**2 + self.stdev_d**2 + self.stdev_wt**2
-        gamma -= (self.theta_IBE + 1) * self.stdev_wr
+        gamma -= (self.theta_IBE + 1) * self.stdev_wr**2
         return gamma
 
     def _calculate_u(self, n, cut):
@@ -79,9 +86,13 @@ class Individual(PowerBase):
     def calculate(self):
         gamma = self._calculate_gamma()
         self.n = None
+        found_solution = False
         for i in range(2, MAX_ITERATIONS):
             bound = gamma + math.sqrt(self._calculate_u(i, 0.05))
             bound += math.sqrt(self._calculate_u(i, self.power))
             if bound < 0:
                 self.n = i
+                found_solution = True
                 break
+        if not found_solution:
+            raise BaseException("N > " + str(MAX_ITERATIONS))

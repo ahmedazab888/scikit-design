@@ -2,6 +2,7 @@
 bak/
 tmp/
 notes.md
+archive/*
 
 # Tmp files for asset generation
 .webassets-cache/

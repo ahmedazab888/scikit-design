@@ -10,7 +10,7 @@ def test_cox():
             hazard_ratio=2, control_proportion=0.5,
             treatment_proportion=0.5, proportion_visible=0.8)
     h.calculate()
-    assert h.n, 82
+    assert h.n == 82
     assert h.power > 0.8
 
     h = Cox(alpha=0.05, n=82, hypothesis='equality',
@@ -29,7 +29,7 @@ def test_cox():
             hazard_ratio=2, control_proportion=0.5, margin=0.3,
             treatment_proportion=0.5, proportion_visible=0.8)
     h.calculate()
-    assert h.n, 200
+    assert h.n == 200
     assert h.power > 0.8
 
     h = Cox(alpha=0.05, n=200, hypothesis='superiority',
@@ -49,7 +49,7 @@ def test_cox():
             hazard_ratio=1, control_proportion=0.5, margin=0.5,
             treatment_proportion=0.5, proportion_visible=0.8)
     h.calculate()
-    assert h.n, 172
+    assert h.n == 172
     assert h.power > 0.8
 
     # Chow has 171.  We get 172.  The difference is due to rounding.
@@ -80,8 +80,9 @@ def test_exponential():
                     control_hazard=2, treatment_hazard=1, gamma=0,
                     trial_time=3, accrual_time=1)
     h.calculate()
-    assert h.n_1, 41
-    assert h.n_2, 41
+    print(h.n_1)
+    assert h.n_1 == 41
+    assert h.n_2 == 41
     assert h.power > 0.8
 
     h = Exponential(alpha=0.05, power=0.8, margin=0.2,
@@ -89,8 +90,8 @@ def test_exponential():
                     treatment_hazard=1, gamma=0,
                     trial_time=3, accrual_time=1)
     h.calculate()
-    assert h.n_1, 50
-    assert h.n_2, 50
+    assert h.n_1 == 50
+    assert h.n_2 == 50
     assert h.power > 0.8
 
     h = Exponential(ratio=1, alpha=0.05, power=0.8, margin=0.5,
@@ -98,6 +99,6 @@ def test_exponential():
                     treatment_hazard=1, gamma=0,
                     trial_time=3, accrual_time=1)
     h.calculate()
-    assert h.n_1, 75
-    assert h.n_2, 75
+    assert h.n_1 == 75
+    assert h.n_2 == 75
     assert h.power > 0.8
