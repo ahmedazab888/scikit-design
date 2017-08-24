@@ -143,6 +143,4 @@ class Binomial(PowerBase):
             p_val = stats.binom_test(x, n=self.n, p=self.p_0)
             p_vals.append(p_val)
         p_vals.sort()
-        print(power)
-        print(int(self._N_SIMS * power))
         self.alpha = p_vals[int(self._N_SIMS * power)]

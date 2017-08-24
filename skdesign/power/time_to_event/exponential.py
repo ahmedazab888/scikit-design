@@ -2,6 +2,7 @@ import math
 from skdesign.power.means import TwoSampleParallel
 from skdesign.power import (is_non_negative,
                             is_positive)
+import scipy.stats as stats
 
 
 class Exponential(TwoSampleParallel):
@@ -84,12 +85,78 @@ class Exponential(TwoSampleParallel):
             EV = 1 + EVNum / EVDenom
             variance.append(hazard**2 / EV)
 
-        stdev = math.sqrt(variance[0] / ratio + variance[1])
+        self.stdev_control = math.sqrt(variance[0])
+        self.stdev_treatment = math.sqrt(variance[1])
+        print(variance)
+        print(1)
 
         # Initialize the remaining arguments through the parent.
         super(Exponential, self).__init__(n_1=n_1, n_2=n_2, ratio=ratio,
                                           mu_1=control_hazard,
-                                          mu_2=treatment_hazard, stdev=stdev,
+                                          mu_2=treatment_hazard, stdev=1,  # dummy value
                                           known_stdev=True, alpha=alpha,
                                           beta=beta, power=power,
                                           margin=margin, hypothesis=hypothesis)
+
+    def _calculate_n_known(self):
+        """ Calculate n in the case that the standard deviation is known.
+
+        This is an internal method only.
+        """
+        distribution = stats.norm()
+        z_alpha = distribution.ppf(1 - self.alpha / self._alpha_adjustment)
+        z_beta = distribution.ppf(1 - self.beta / self._beta_adjustment)
+
+        n_2 = (z_alpha + z_beta)**2 / self.epsilon**2 * (self.stdev_control / self.ratio + self.stdev_treatment)
+        self.n_2 = math.ceil(n_2)
+        self.n_1 = math.ceil(self.ratio * self.n_2)
+
+    def _calculate_alpha_known(self):
+        """ Calculate :math:`\\alpha` in the case that the standard deviation
+        is known.
+
+        This is an internal method only.
+        """
+        theta = (self.stdev_control / self.ratio + self.stdev_treatment) / self.epsilon**2
+        theta = math.sqrt(theta)
+        distribution = stats.norm()
+        z_beta = distribution.ppf(1 - self.beta / self._beta_adjustment)
+        z_alpha = math.sqrt(self.n_2) * abs(theta) - z_beta
+
+        self.alpha = (1 - distribution.cdf(z_alpha)) * self._alpha_adjustment
+
+    def _calculate_power_known(self):
+        """ Calculate power in the case that the standard deviation is known.
+
+        This is an internal method only.
+        """
+        theta = (self.stdev_control / self.ratio + self.stdev_treatment) / self.epsilon**2
+        theta = math.sqrt(theta)
+        distribution = stats.norm()
+        z_alpha = distribution.ppf(1 - self.alpha / self._alpha_adjustment)
+        z_beta = math.sqrt(self.n_2) * abs(theta) - z_alpha
+
+        self.beta = (1 - stats.norm.cdf(z_beta)) * self._beta_adjustment
+        self.power = 1 - self.beta
+
+    def calculate(self):
+        """ Performs the power calculation """
+        if self.n is None:
+            self._set_default_alpha()
+            self._set_default_power()
+            self._calculate_n_known()
+            self._calculate_power_known()
+        elif self.power is None:
+            self._set_default_alpha()
+            self._calculate_power_known()
+        elif self.alpha is None:
+            self._calculate_alpha_known()
+
+    def __repr__(self):
+        """ The canonical representation of a TwoSampleParallel object
+        """
+        representation = "Alpha: " + str(self.alpha) + "\n" + \
+                         "Power: " + str(self.power) + "\n" + \
+                         "Sample Size (Group 1): " + str(self.n_1) + "\n" \
+                         "Sample Size (Group 2): " + str(self.n_2) + "\n"
+        return representation

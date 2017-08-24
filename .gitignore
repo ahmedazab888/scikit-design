@@ -10,9 +10,6 @@ archive/*
 # npm stuff
 node_modules/
 
-# Symbolic Links
-skdesign
-
 # Databases 
 *.db
 

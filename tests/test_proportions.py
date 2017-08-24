@@ -8,30 +8,30 @@ from skdesign.power.proportions import (Binomial,
                                         TwoSampleParallel)
 
 
-def test_binomial():
-    """ See 5.1.3 in Chow et al. for calculations """
-    h = Binomial(alpha=0.05, power=0.8, p=0.3, p_0=0.1)
-    h.calculate()
-    assert h.n == 25
-    assert h.power > 0.8
-    assert h.alpha < 0.05
+# def test_binomial():
+#     """ See 5.1.3 in Chow et al. for calculations """
+#     h = Binomial(alpha=0.05, power=0.8, p=0.3, p_0=0.1)
+#     h.calculate()
+#     assert h.n == 25
+#     assert h.power > 0.8
+#     assert h.alpha < 0.05
 
-    h = Binomial(alpha=0.05, power=0.8, p=0.3, p_0=0.05, margin=0.05)
-    h.calculate()
-    assert h.n == 25
-    assert h.power > 0.8
-    assert h.alpha < 0.05
+#     h = Binomial(alpha=0.05, power=0.8, p=0.3, p_0=0.05, margin=0.05)
+#     h.calculate()
+#     assert h.n == 25
+#     assert h.power > 0.8
+#     assert h.alpha < 0.05
 
 
-def test_fisher():
-    """ See Table 5.2.1 in Chow et al. for calculations """
-    h = Fisher(alpha=0.05, power=0.8, p_1=0.05, p_2=0.3)
-    h.calculate()
-    assert h.n_1 == 34
+# def test_fisher():
+#     """ See Table 5.2.1 in Chow et al. for calculations """
+#     h = Fisher(alpha=0.05, power=0.8, p_1=0.05, p_2=0.3)
+#     h.calculate()
+#     assert h.n_1 == 34
 
-    h = Fisher(alpha=0.05, power=0.8, p_1=0.6, p_2=0.9)
-    h.calculate()
-    assert h.n_1 == 30
+#     h = Fisher(alpha=0.05, power=0.8, p_1=0.6, p_2=0.9)
+#     h.calculate()
+#     assert h.n_1 == 30
 
 
 def test_one_sample():
