@@ -261,7 +261,7 @@ def test_stratification():
 def test_double_biased_coin_minimize():
     """ Test Cases for double_biased_coin_minimize """
     result = randomization.double_biased_coin_minimize(5, 6, 7, 8)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
     # Test that you cannot have more events than subjects.
     with pytest.raises(ValueError):
@@ -273,19 +273,19 @@ def test_double_biased_coin_minimize():
 
     # Test that you can have the same number of events as subjects
     result = randomization.double_biased_coin_minimize(6, 6, 7, 8)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
     result = randomization.double_biased_coin_minimize(6, 8, 7, 7)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
     result = randomization.double_biased_coin_minimize(6, 6, 7, 8)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
 
 def test_double_biased_coin_urn():
     """ Test Cases for double_biased_coin_urn """
     result = randomization.double_biased_coin_urn(5, 6, 7, 8)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
     # Test that you cannot have more events than subjects.
     with pytest.raises(ValueError):
@@ -297,10 +297,10 @@ def test_double_biased_coin_urn():
 
     # Test that you can have the same number of events as subjects
     result = randomization.double_biased_coin_urn(6, 6, 7, 8)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
     result = randomization.double_biased_coin_urn(6, 8, 7, 7)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]
 
     result = randomization.double_biased_coin_urn(6, 6, 7, 8)
-    assert len(result) == 1
+    assert result in ["Control", "Treatment"]

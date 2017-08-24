@@ -1,6 +1,5 @@
 """ Functions for a factorial design """
 import random
-from numpy import array
 
 
 def block_design(randomize=None, seed=None, **kwargs):
@@ -67,7 +66,7 @@ def two_series_factorial(k=None, factors=None, labels=None,
 
     Arguments:
         k: (optional) the number of factors
-        factors: (optional)
+        factors: (optional) a list of factor names (length must be equal to k)
         labels: (optional) labels for the high and low levels.  The default is
             ['High', 'Low']
         randomize: (optional) A boolean indicating if the runs should be in a
