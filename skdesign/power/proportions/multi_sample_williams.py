@@ -7,10 +7,6 @@ class MultiSampleWilliams(MultiSampleWilliamsMeans):
     """ Power and Sample Size calculations for multi-sample Williams Design
     for proportions.
 
-    The One Sample Test of Means covers three hypothesis: equality,
-    superiority, and equivalence.  Let :math:`\\epsilon` be the estimate of the
-    true difference between treatments.
-
     The test for equality tests :math:`H_{0}: \\epsilon = 0` versus
     :math:`H_{1}: \\epsilon \\ne 0`.
 
