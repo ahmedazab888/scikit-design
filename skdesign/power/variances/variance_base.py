@@ -45,23 +45,50 @@ class VarianceBase(PowerBase):
         is_positive(stdev_2, 'stdev_2')
         self.stdev_2 = stdev_2
 
+        # _alpha and _beta are adjusted to be used as cutpoints.
+        # alpha and beta are to be used for display
+        # We use _beta to prevent floating point errors when beta is passed on
         if hypothesis == 'equality':
-            self._alpha_adjustment = 2
-            self._beta_adjustment = 1
+            if alpha is not None:
+                self._alpha = alpha / 2
+            else:
+                self._alpha = None
+            if power is not None:
+                self._beta = 1 - power
+            elif beta is not None:
+                self._beta = beta
+            else:
+                self._beta = None
             similarity_limit = 1
             sigma_ratio = stdev_2 / stdev_1
         elif hypothesis == 'superiority':
-            self._alpha_adjustment = 1
-            self._beta_adjustment = 1
+            if alpha is not None:
+                self._alpha = alpha
+            else:
+                self._alpha = None
+            if power is not None:
+                self._beta = 1 - power
+            elif beta is not None:
+                self._beta = beta
+            else:
+                self._beta = None
             if similarity_limit is None:
                 raise ValueError('A similarity_limit must be provided')
             sigma_ratio = stdev_2 / (stdev_1 * similarity_limit)
         elif hypothesis == 'equivalence':
-            self._alpha_adjustment = 1
-            self._beta_adjustment = 2
+            if alpha is not None:
+                self._alpha = 1 - alpha
+            else:
+                self._alpha = None
+            if power is not None:
+                self._beta = (power) / 2
+            elif beta is not None:
+                self._beta = (1 - beta) / 2
+            else:
+                self._beta = None
             if similarity_limit is None:
                 raise ValueError('A similarity_limit must be provided')
-            sigma_ratio = (stdev_2 * similarity_limit) / stdev_1
+            sigma_ratio = stdev_2 / (stdev_1 * similarity_limit)
 
         self.similarity_limit = similarity_limit
         self.sigma_ratio = sigma_ratio
@@ -69,3 +96,24 @@ class VarianceBase(PowerBase):
         # Initialize the remaining arguments through the parent.
         super(VarianceBase, self).__init__(alpha=alpha, power=power,
                                            beta=beta, hypothesis=hypothesis)
+
+    def update_alpha(self):
+        """ Transform _alpha to alpha """
+        if self.hypothesis == 'equality':
+            self.alpha = self._alpha * 2
+        elif self.hypothesis == 'superiority':
+            self.alpha = self._alpha
+        elif self.hypothesis == 'equivalence':
+            self.alpha = 1 - self._alpha
+
+    def update_beta(self):
+        """ Transform _beta to alpha """
+        if self.hypothesis == 'equality':
+            self.beta = self._beta
+            self.power = 1 - self.beta
+        elif self.hypothesis == 'superiority':
+            self.beta = self._beta
+            self.power = 1 - self.beta
+        elif self.hypothesis == 'equivalence':
+            self.beta = 1 - 2 * self._beta
+            self.power = 1 - self.beta

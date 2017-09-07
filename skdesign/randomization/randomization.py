@@ -3,7 +3,6 @@ Randomization is a module that provides functions to create random group
 assignments to be used in clinical trials
 """
 
-import math
 import random
 import numbers
 
@@ -117,6 +116,61 @@ def simple(n_subjects, n_groups, p=None, seed=None):
     return groups
 
 
+def simple_max_deviation(n_subjects, max_allowed_deviation=None,
+                         max_iterations=None, seed=None):
+    """ Create a randomization list using simple randomization.
+
+
+    Simple randomization randomly assigns each new subject to a group
+    independent of the assignment of the previous members.
+
+    This function performs simple randomization but ensures that the deviation
+    is kept below a specified limit (between 0 and 1).
+
+    Args:
+        subjects: A list of group labels to randomize.
+        max_allowed_deviation: (optional) The maximum deviation allowed. The
+            default is 0.20 (20%).
+        max_iterations: (optional) The maximum number of tries to find a
+            list that satisfies the `max_deviation` criteria.  The default
+            is 100.
+        seed: (optional) The seed to provide to the RNG.
+
+    Returns:
+        list: a list of length `len(subjects)` of the group labels of the
+            subjects.
+
+    Raises:
+        ValueError: If the length of `max_deviation` is not in [0, 1].
+        ValueError: If the length of `max_iterations` is not an integer.
+
+    Notes:
+        Complete Randomization is prone to long runs of a single group.  By
+        setting a maximum deviation, you can avoid that.  However, the lower
+        the maximum deviation and the greated the number of subjects
+    """
+
+    random.seed(seed)
+
+    if max_allowed_deviation is None:
+        max_allowed_deviation = 0.20
+    elif max_allowed_deviation >= 1 or max_allowed_deviation <= 0:
+        raise ValueError("`max_allowed_deviation` must be in (0, 1).")
+
+    if max_iterations is None:
+        max_iterations = 100
+    elif not isinstance(max_iterations, int) or max_iterations <= 0:
+        raise ValueError("`max_iterations` must be a postive integer.")
+
+    for iteration in range(max_iterations):
+        groups = simple(n_subjects, 2)
+
+        candidate_max_deviation = max_deviation(groups, [1, 2])
+        if candidate_max_deviation < max_allowed_deviation:
+            return groups
+    return None
+
+
 def complete(subjects, seed=None):
     """ Create a randomization list using complete randomization.
 
@@ -157,7 +211,7 @@ def complete_max_deviation(subjects, max_allowed_deviation=None,
     ensures that the resultant list is retains the exact balance desired.
     This randomization is done in place.
 
-    This function performs complete randomization be ensures that the deviation
+    This function performs complete randomization but ensures that the deviation
     is kept below a specified limit (between 0 and 1).
 
     Args:
@@ -530,149 +584,3 @@ def stratification(n_subjects_per_strata, n_groups, block_length=4, seed=None):
         groups.append(block(n_subjects_per_stratum, n_groups,
                             block_length, seed))
     return groups
-
-
-# A Response addaptive randomization technique
-def double_biased_coin_minimize(control_success, control_trials,
-                                treatment_success, treatment_trials,
-                                control_name=None, treatment_name=None,
-                                seed=None):
-    """ Returns a group assignment for adaptive trials using the Double Biased
-    Coin Minimization method.
-
-    Suppose that :math:`N_{c}` is the number of controls, of which
-    :math:`S_{c}` were successes and :math:`N_{t}` is the number of treatments,
-    of which :math:`S_{t}` were successes.  We can define the probability of
-    success as:
-
-    .. math::
-        p_{c} = \\frac{S_{c}}{N_{c}}
-        p_{t} = \\frac{S_{t}}{N_{t}}
-
-    The next subject will be randomized to the control group with probability:
-
-    .. math::
-        \\frac{\sqrt{p_{c}}}{\\sqrt{p_{c}} + \\sqrt{p_{t}}}
-
-    Args:
-        control_success: The number of successfull trials in the control group.
-        control_trials: The number of trials in the control group.
-        treatment_success: The number of successfull trials in the treatment
-            group.
-        treatment_trials: The number of trials in the treatment group.
-        control_name: (optional) The name of the control group.  The default
-            is 'C'
-        treatment_name: (optional) The name of the treatment group.  The
-            default is 'T'
-        seed: (optional) The seed to provide to the RNG.
-
-    Returns:
-        list: the name (either `control_name` or `treatment_name`) of the group
-            the subject is assigned to.
-    """
-    if control_trials < control_success:
-        raise ValueError('`control_trials` must be greater than or equal '
-                         'to `control_success`')
-    if treatment_trials < treatment_success:
-        raise ValueError('`treatment_trials` must be greater than or equal '
-                         'to `treatment_success`')
-
-    if control_name is None:
-        control_name = "Control"
-    if treatment_name is None:
-        treatment_name = "Treatment"
-
-    if seed is not None:
-        # This ensures a new seed for each selection
-        seed = seed + 10 * (control_trials + treatment_trials)
-
-    random.seed(seed)
-
-    if control_trials > 1:
-        pC = float(control_success) / control_trials
-    else:
-        pC = 0.5
-    if treatment_trials > 1:
-        pT = float(treatment_success) / treatment_trials
-    else:
-        pT = 0.5
-
-    cut = math.sqrt(pC) / (math.sqrt(pC) + math.sqrt(pT))
-    test = random.random()
-
-    if test < cut:
-        group = control_name
-    else:
-        group = treatment_name
-    return group
-
-
-# A Response addaptive randomization technique
-def double_biased_coin_urn(control_success, control_trials,
-                           treatment_success, treatment_trials,
-                           control_name=None, treatment_name=None,
-                           seed=None):
-    """ Returns a group assignment for adaptive trials using the Double Biased
-    Coin Minimization method.
-
-    Suppose that :math:`N_{c}` is the number of controls, of which
-    :math:`S_{c}` were successes and :math:`N_{t}` is the number of treatments,
-    of which :math:`S_{t}` were successes.  We can define the probability of
-    success as:
-
-    .. math::
-        p_{c} = \\frac{S_{c}}{N_{c}}
-        p_{t} = \\frac{S_{t}}{N_{t}}
-
-    The next subject will be randomized to the control group with probability:
-
-    .. math::
-        \\frac{1 - p_{t}}{(1 - p_{c}) + (1 - p_{t})}
-
-    Args:
-        control_success: The number of successfull trials in the control group.
-        control_trials: The number of trials in the control group.
-        treatment_success: The number of successfull trials in the treatment
-            group.
-        treatment_trials: The number of trials in the treatment group.
-        control_name: (optional) The name of the control group.  The default
-            is 'C'
-        treatment_name: (optional) The name of the treatment group.  The
-            default is 'T'
-        seed: (optional) The seed to provide to the RNG.
-
-    Returns:
-        list: the name (either `control_name` or `treatment_name`) of the group
-            the subject is assigned to.
-    """
-    if control_trials < control_success:
-        raise ValueError('`control_trials` must be greater than or equal '
-                         'to `control_success`')
-    if treatment_trials < treatment_success:
-        raise ValueError('`treatment_trials` must be greater than or equal '
-                         'to `treatment_success`')
-
-    if control_name is None:
-        control_name = "Control"
-    if treatment_name is None:
-        treatment_name = "Treatment"
-
-    if seed is not None:
-        # This ensures a new seed for each selection
-        seed = seed + 10 * (control_trials + treatment_trials)
-    random.seed(seed)
-    if control_trials > 1:
-        pC = float(control_success) / control_trials
-    else:
-        pC = 0.5
-    if treatment_trials > 1:
-        pT = float(treatment_success) / treatment_trials
-    else:
-        pT = 0.5
-    cut = (1 - pT) / ((1 - pT) + (1 - pC))
-    test = random.random()
-    if test < cut:
-        group = control_name
-    else:
-        group = treatment_name
-    return group

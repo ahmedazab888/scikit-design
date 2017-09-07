@@ -172,6 +172,7 @@ class TwoSampleParallel(MeansBase):
                 self._set_default_power()
                 self._calculate_n_known()
                 self._calculate_power_known()
+                self.n = self.n_1 + self.n_2
             elif self.power is None:
                 self._set_default_alpha()
                 self._calculate_power_known()

@@ -47,6 +47,8 @@ class PowerBase(object):
             is_in_0_1(power, 'power')
             if beta is not None:
                 if beta is not (1 - power):
+                    print(beta)
+                    print(power)
                     raise ValueError("`power` does not equal 1 - `beta`.")
                 else:
                     self.beta = beta

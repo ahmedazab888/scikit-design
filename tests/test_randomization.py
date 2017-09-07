@@ -148,6 +148,34 @@ def test_complete_max_deviation():
                                              max_iterations=-10)
 
 
+def test_simple_max_deviation():
+    """ Test Cases for Simple Ranomization with max-deviation """
+    n_subjects = 100
+    result = randomization.simple_max_deviation(n_subjects, max_allowed_deviation=0.5)
+    dev = randomization.max_deviation(result, [1, 2])
+    assert dev < 0.5
+
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects, max_allowed_deviation=1.5)
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects, max_allowed_deviation=1)
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects, max_allowed_deviation=0)
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects,
+                                           max_allowed_deviation=-0.2)
+
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects,
+                                           max_iterations=10.2)
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects,
+                                           max_iterations=0)
+    with pytest.raises(ValueError):
+        randomization.simple_max_deviation(n_subjects,
+                                           max_iterations=-10)
+
+
 def test_block():
     """ Test Cases for Block Ranomization """
 
@@ -304,3 +332,15 @@ def test_double_biased_coin_urn():
 
     result = randomization.double_biased_coin_urn(6, 6, 7, 8)
     assert result in ["Control", "Treatment"]
+
+
+def test_minimization():
+    """ Test Cases for minimization """
+    counts = [[10, 9], [2, 2]]
+    names = ['Treatment 1', 'Treatment 2']
+
+    result = randomization.minimization(counts)
+    assert result == 2
+
+    result = randomization.minimization(counts, group_labels=names)
+    assert result == 'Treatment 2'

@@ -51,15 +51,14 @@ class IntraSubjectCrossover(VarianceBase):
                                                     power=power)
 
     @staticmethod
-    def _calculate_power_unknown(n, m, sigma_ratio, alpha, beta,
-                                 _alpha_adjustment, _beta_adjustment):
+    def _calculate_power_unknown(n, m, sigma_ratio, alpha, beta):
         """
         """
         df = (2 * n - 2) * (m - 1)
         ratioLeft = sigma_ratio**2
 
-        ratioRight = (stats.f.ppf(beta / _beta_adjustment, df, df) /
-                      stats.f.ppf(1 - alpha / _alpha_adjustment, df, df))
+        ratioRight = (stats.f.ppf(beta, df, df) /
+                      stats.f.ppf(1 - alpha, df, df))
         res = ratioLeft - ratioRight
         return res
 
@@ -71,44 +70,38 @@ class IntraSubjectCrossover(VarianceBase):
                          self._calculate_power_unknown(n,
                                                        self.m,
                                                        self.sigma_ratio,
-                                                       self.alpha,
-                                                       self.beta,
-                                                       self._alpha_adjustment,
-                                                       self._beta_adjustment),
+                                                       self._alpha,
+                                                       self._beta),
                          a=2, b=1e7)
             self.n = math.ceil(res)
             res = brenth(lambda beta:
                          self._calculate_power_unknown(self.n,
                                                        self.m,
                                                        self.sigma_ratio,
-                                                       self.alpha,
-                                                       beta,
-                                                       self._alpha_adjustment,
-                                                       self._beta_adjustment),
+                                                       self._alpha,
+                                                       beta),
                          a=0, b=1)
-            self.beta = res
-            self.power = 1 - self.beta
+            self._beta = res
+            self.update_beta()
+            print(self.hypothesis)
         elif self.power is None:
             self._set_default_alpha()
             res = brenth(lambda beta:
                          self._calculate_power_unknown(self.n,
                                                        self.m,
                                                        self.sigma_ratio,
-                                                       self.alpha,
-                                                       beta,
-                                                       self._alpha_adjustment,
-                                                       self._beta_adjustment),
+                                                       self._alpha,
+                                                       beta),
                          a=1e-7, b=1 - 1e-7)
-            self.beta = res
-            self.power = 1 - self.beta
+            self._beta = res
+            self.update_beta()
         elif self.alpha is None:
             res = brenth(lambda alpha:
                          self._calculate_power_unknown(self.n,
                                                        self.m,
                                                        self.sigma_ratio,
                                                        alpha,
-                                                       self.beta,
-                                                       self._alpha_adjustment,
-                                                       self._beta_adjustment),
+                                                       self._beta),
                          a=1e-7, b=1 - 1e-7)
-            self.alpha = res
+            self._alpha = res
+            self.update_alpha()

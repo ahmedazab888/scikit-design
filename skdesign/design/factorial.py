@@ -1,5 +1,6 @@
 """ Functions for a factorial design """
 import random
+from collections import OrderedDict
 
 
 def block_design(randomize=None, seed=None, **kwargs):
@@ -22,6 +23,7 @@ def block_design(randomize=None, seed=None, **kwargs):
 
     # Sort the keywords to ensure reproducibiltiy
     factors = sorted(kwargs.items())
+    print(factors)
     for factor, levels in factors:
         factor_names.append(factor)
         if not isinstance(levels, list):
@@ -105,7 +107,7 @@ def two_series_factorial(k=None, factors=None, labels=None,
         if not isinstance(labels, list) or len(labels) != 2:
             raise ValueError('`labels` must be a list of length 2')
 
-    levels = {}
+    levels = OrderedDict({})
     for factor in factors:
         levels[factor] = labels
 

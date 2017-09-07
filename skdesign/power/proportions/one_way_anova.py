@@ -70,7 +70,7 @@ class OneWayAnova(PowerBase):
             is_in_0_1(value, 'Each value in `p` should be in [0, 1].')
 
         if p_0 is not None:
-            is_in_0_1(value, 'Each value in `p_0` should be in [0, 1].')
+            is_in_0_1(value, '`p_0` should be in [0, 1].')
 
         self.p = p
         self.p_0 = p_0
