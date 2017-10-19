@@ -39,7 +39,7 @@ class MultiSampleWilliams(MultiSampleWilliamsMeans):
         each contrast.
     """
 
-    def __init__(self, n=None, p=None, sigma=None, hypothesis=None,
+    def __init__(self, n=None, p=None, stdev=None, hypothesis=None,
                  margin=None, alpha=None, beta=None, power=None):
 
         for value in p:
@@ -48,7 +48,7 @@ class MultiSampleWilliams(MultiSampleWilliamsMeans):
         # This is the same as the Multi-Sample Williams design for means
         super(MultiSampleWilliams, self).__init__(n=n,
                                                   mu=p,
-                                                  sigma=sigma,
+                                                  stdev=stdev,
                                                   margin=margin,
                                                   alpha=alpha,
                                                   power=power,

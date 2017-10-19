@@ -87,8 +87,6 @@ class Exponential(TwoSampleParallel):
 
         self.stdev_control = math.sqrt(variance[0])
         self.stdev_treatment = math.sqrt(variance[1])
-        print(variance)
-        print(1)
 
         # Initialize the remaining arguments through the parent.
         super(Exponential, self).__init__(n_1=n_1, n_2=n_2, ratio=ratio,
@@ -107,9 +105,10 @@ class Exponential(TwoSampleParallel):
         z_alpha = distribution.ppf(1 - self.alpha / self._alpha_adjustment)
         z_beta = distribution.ppf(1 - self.beta / self._beta_adjustment)
 
-        n_2 = (z_alpha + z_beta)**2 / self.epsilon**2 * (self.stdev_control / self.ratio + self.stdev_treatment)
+        n_2 = (z_alpha + z_beta)**2 / self.epsilon**2 * (self.stdev_control**2 / self.ratio + self.stdev_treatment**2)
         self.n_2 = math.ceil(n_2)
         self.n_1 = math.ceil(self.ratio * self.n_2)
+        self.n = self.n_1 + self.n_2
 
     def _calculate_alpha_known(self):
         """ Calculate :math:`\\alpha` in the case that the standard deviation
@@ -117,8 +116,8 @@ class Exponential(TwoSampleParallel):
 
         This is an internal method only.
         """
-        theta = (self.stdev_control / self.ratio + self.stdev_treatment) / self.epsilon**2
-        theta = math.sqrt(theta)
+        theta = (self.stdev_control**2 / self.ratio + self.stdev_treatment**2) / self.epsilon**2
+        theta = 1 / math.sqrt(theta)
         distribution = stats.norm()
         z_beta = distribution.ppf(1 - self.beta / self._beta_adjustment)
         z_alpha = math.sqrt(self.n_2) * abs(theta) - z_beta
@@ -130,8 +129,8 @@ class Exponential(TwoSampleParallel):
 
         This is an internal method only.
         """
-        theta = (self.stdev_control / self.ratio + self.stdev_treatment) / self.epsilon**2
-        theta = math.sqrt(theta)
+        theta = (self.stdev_control**2 / self.ratio + self.stdev_treatment**2) / self.epsilon**2
+        theta = 1 / math.sqrt(theta)
         distribution = stats.norm()
         z_alpha = distribution.ppf(1 - self.alpha / self._alpha_adjustment)
         z_beta = math.sqrt(self.n_2) * abs(theta) - z_alpha

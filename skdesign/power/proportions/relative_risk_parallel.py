@@ -126,6 +126,7 @@ class RelativeRiskParallel(PowerBase):
         n_2 = (z_alpha + z_beta)**2 / self.theta**2
         self.n_2 = math.ceil(n_2)
         self.n_1 = math.ceil(self.ratio * self.n_2)
+        self.n = self.n_1 + self.n_2
 
     def _calculate_alpha_known(self):
         """ Calculate :math:`\\alpha` in the case that the standard deviation

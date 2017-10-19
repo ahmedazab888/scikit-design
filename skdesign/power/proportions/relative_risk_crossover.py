@@ -57,8 +57,8 @@ class RelativeRiskCrossover(TwoSampleCrossover):
         log_odds = math.log(odds_ratio)
 
         # Initialize the remaining arguments through the parent.
-        super(TwoSampleCrossover, self).__init__(n=n, mu_1=log_odds, mu_2=0,
-                                                 stdev=stdev, known_stdev=True,
-                                                 alpha=alpha, beta=beta,
-                                                 power=power, margin=margin,
-                                                 hypothesis=hypothesis)
+        super(RelativeRiskCrossover, self).__init__(n=n, mu_1=log_odds, mu_2=0,
+                                                    stdev=stdev, known_stdev=True,
+                                                    alpha=alpha, beta=beta,
+                                                    power=power, margin=margin,
+                                                    hypothesis=hypothesis)

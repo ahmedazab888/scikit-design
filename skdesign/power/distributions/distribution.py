@@ -14,7 +14,7 @@ class Distribution(PowerBase):
 
     # Parameters controling the search grid for the calculation of sample size.
     _minN = 2
-    _maxN = 100
+    _maxN = 1000
 
     def __init__(self, n=None, alpha=None, beta=None, power=None, method=None,
                  dist=None, compare_dist=None, seed=None, **kwargs):
@@ -72,17 +72,17 @@ class Distribution(PowerBase):
             power = self.power
 
         if self.alpha is None:
-            alpha = 0.5
+            alpha = 0.05
         else:
             alpha = self.alpha
 
         found_solution = False
         for n in range(self._minN, self._maxN):
-            res = self.dist(size=self._N_SIMS, random_state=self.seed)
-
             count = 0
-            for x in res:
-                _, p_val = self.distribution_test(res)
+            for sim in range(self._N_SIMS):
+                res = self.dist.rvs(size=n, random_state=self.seed * sim)
+
+                _, p_val = self.normal_test(res)
                 if p_val < alpha:
                     count += 1
             test_power = count / self._N_SIMS
@@ -103,7 +103,7 @@ class Distribution(PowerBase):
 
         count = 0
         for sim in range(self._N_SIMS):
-            res = self.dist(size=self.n, random_state=self.seed)
+            res = self.dist.rvs(size=self.n, random_state=self.seed * sim)
 
             _, p_val = self.distribution_test(res)
             if p_val < alpha:
@@ -120,9 +120,9 @@ class Distribution(PowerBase):
 
         p_vals = []
         for sim in range(self._N_SIMS):
-            res = self.dist(size=self.n, random_state=self.seed)
+            res = self.dist.rvs(size=self.n, random_state=self.seed * sim)
 
             _, p_val = self.distribution_test(res)
             p_vals.append(p_val)
         p_vals.sort()
-        self.alpha = p_vals[int(self._N_SIMS * power)]
+        self.alpha = p_vals[int(self._N_SIMS * power) - 1]

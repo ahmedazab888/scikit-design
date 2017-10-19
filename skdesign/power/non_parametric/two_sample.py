@@ -73,6 +73,7 @@ class TwoSample(PowerBase):
 
         self.n_2 = math.ceil(n)
         self.n_1 = math.ceil(self.ratio * self.n_2)
+        self.n = self.n_1 + self.n_2
 
     def _calculate_alpha(self):
         """ Calculate :math:`\\alpha`
